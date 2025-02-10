@@ -1,18 +1,13 @@
-import About from '@/pages/About'
-import Home from '@/pages/Home'
-import MainLayout from '@/pages/MainLayout'
-import Protected from '@/pages/Protected'
-import { Route, Routes } from 'react-router'
+import { Route, Routes } from "react-router"
+import Home from "./pages/Home"
 
 function App() {
   return (
-    <Routes>
-      <Route element={<MainLayout />}>
+    <>
+      <Routes>
         <Route index element={<Home />} />
-        <Route path='about' element={<About />} />
-        <Route path='protected' element={<Protected />} />
-      </Route>
-    </Routes>
+      </Routes>
+    </>
   )
 }
 
