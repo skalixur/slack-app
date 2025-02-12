@@ -2,7 +2,8 @@ import { createContext } from "react"
 import { useStateWithLocalStorage } from "../hooks/useStateWithLocalStorage"
 import localStorageKeys from "../lib/localStorageKeys"
 
-const authInfoIfExistent = JSON.parse(localStorage.getItem(localStorageKeys.LOCALSTORAGE_KEY_AUTHINFO)) || null
+const returnedAuthInfo = localStorage.getItem(localStorageKeys.LOCALSTORAGE_KEY_AUTHINFO) || "null"
+const authInfoIfExistent = JSON.parse(returnedAuthInfo)
 const AuthContext = createContext(authInfoIfExistent)
 
 export function AuthContextProvider({ children }) {

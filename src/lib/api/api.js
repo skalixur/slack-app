@@ -10,6 +10,7 @@ const API = axios.create({
 API.interceptors.request.use((config) => {
   const authInfo = JSON.parse(localStorage.getItem('authInfo'))
   if (authInfo) {
+    console.log(authInfo)
     const { accessToken, client, expiry, uid } = authInfo
     config.headers['access-token'] = accessToken
     config.headers['client'] = client
