@@ -8,30 +8,34 @@ import UserChat from "@/pages/Chat/UserChat"
 import Home from "@/pages/Home"
 import Login from "@/pages/Login"
 import Signup from "@/pages/Signup"
+import { useLogin, useNoLogin } from "./hooks/useLogin"
 
 function App() {
-  const { authInfo } = useContext(AuthContext)
-  function createWithCondition(conditionFunction, redirectTo) {
-    return function withCondition(InnerComponent) {
-      return function Component(props) {
-        return conditionFunction() ? <InnerComponent {...props} /> : <Navigate to={redirectTo} replace />
-      }
-    }
-  }
 
   function NavigateToChat(props) {
-    return <Navigate to="/chat" replace />
+    const redirect = useLogin()
+    return redirect || <Navigate to="/chat" replace />
   }
 
-  const withLogin = createWithCondition(() => !!authInfo, '/login/')
-  const withoutLogin = createWithCondition(() => !authInfo, '/chat/')
+  function PublicOnlyLogin() {
+    const redirect = useNoLogin();
+    return redirect || <Login />;
+  }
 
-  const PublicOnlyLogin = withoutLogin(Login)
-  const PublicOnlySignup = withoutLogin(Signup)
-  const ProtectedChatLayout = withLogin(ChatLayout)
-  const ProtectedNavigateToChat = withLogin(NavigateToChat)
+  function PublicOnlySignup() {
+    const redirect = useNoLogin();
+    return redirect || <Signup />;
+  }
 
-  console.log("Auth info exists:", !!authInfo)
+  function ProtectedChatLayout() {
+    const redirect = useLogin();
+    return redirect || <ChatLayout />;
+  }
+
+  function ProtectedNavigateToChat() {
+    const redirect = useLogin();
+    return redirect || <Navigate to="/chat" replace />;
+  }
 
   return (
     <>

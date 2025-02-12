@@ -1,10 +1,8 @@
 
 function TextWithGradient({ children, fromColor, viaColor, toColor }) {
   return (
-    <div className={`inline relative bg-clip-text text-transparent bg-no-repeat bg-gradient-to-r from-${fromColor} via-${viaColor} to-${toColor} py-4`}>
-      <span>
-        {children}
-      </span>
+    <div className="inline-block bg-clip-text text-transparent bg-gradient-to-r py-4 from-purple-500 via-violet-500 to-pink-500">
+      {children}
     </div>
   )
 }
