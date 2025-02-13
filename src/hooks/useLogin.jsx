@@ -4,12 +4,10 @@ import AuthContext from "../contexts/AuthContext";
 
 export function useLogin() {
   const { authInfo } = useContext(AuthContext);
-  console.log(authInfo)
   return authInfo ? null : <Navigate to="/login" replace />;
 }
 
 export function useNoLogin() {
   const { authInfo } = useContext(AuthContext);
-  console.log(authInfo)
   return !authInfo ? null : <Navigate to="/chat" replace />;
 }

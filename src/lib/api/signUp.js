@@ -1,17 +1,20 @@
 import API from '@/lib/api/api'
 import handleAPIError from './handleAPIError'
 
-export default async function logIn(email, password) {
-  if (!email || !password) {
+export default async function signUp(email, password, passwordConfirmation) {
+  if (!email || !password || !passwordConfirmation) {
     throw new Error('Missing arguments')
   }
   try {
-    const responseData = await API.post(`/auth/sign_in`, {
+    const responseData = await API.post(`/auth`, {
       email,
       password,
+      password_confirmation: passwordConfirmation,
     })
 
-    console.log(responseData)
+    const {
+      data: { data },
+    } = responseData
 
     const { headers: responseHeaders } = responseData
     const { 'access-token': accessToken, client, expiry, uid } = responseHeaders
@@ -21,10 +24,13 @@ export default async function logIn(email, password) {
       expiry,
       uid,
     }
+
     const result = {
       ok: true,
+      data,
       authHeaders,
     }
+
     return result
   } catch (error) {
     return handleAPIError(error)

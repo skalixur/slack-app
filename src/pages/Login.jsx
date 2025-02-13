@@ -3,14 +3,13 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useContext, useState } from "react"
 import { Link } from "react-router"
-// import TextWithGradient from "../components/TextWithGradient"
-import { TypographyH1 } from "../components/ui/typography"
+import { toast } from "sonner"
+import AccountForm, { AccountFormCard, AccountFormHeading, AccountFormInputContainer } from "../components/AccountForm"
+import TextWithGradient from "../components/TextWithGradient"
+import WarningAlert from "../components/WarningAlert"
 import AuthContext from "../contexts/AuthContext"
 import logIn from "../lib/api/logIn"
-import localStorageKeys from "../lib/localStorageKeys"
-import { useNoLogin } from "../hooks/useLogin"
-import clsx from "clsx"
-const { LOCALSTORAGE_KEY_AUTHINFO } = localStorageKeys
+import getErrorMessageFromAPIError from "../lib/api/getErrorMessageFromAPIError"
 
 function Login() {
   const { authInfo, setAuthInfo } = useContext(AuthContext)
@@ -27,28 +26,37 @@ function Login() {
 
   async function handleFormSubmit(e) {
     e.preventDefault()
-    const authHeaders = await logIn(email, password)
-    if (!authHeaders) {
+    if (!email || !password) {
+      toast(<WarningAlert>Missing email or password!</WarningAlert>)
+    }
+
+    const logInResponse = await logIn(email, password)
+
+    if (!logInResponse.ok) {
+      const errorMessage = getErrorMessageFromAPIError(logInResponse)
+      toast(<WarningAlert>{errorMessage}</WarningAlert>)
       return
     }
-    setAuthInfo(authHeaders)
+    const authHeaders = { logInResponse }
+    setAuthInfo(logInResponse)
   }
 
-
   return (
-    <main className="max-w-full min-h-[100vh] grid place-items-center">
-      <form className="bg-white flex flex-col gap-5 p-8 w-full h-full justify-center items-center sm:border rounded-2xl sm:max-w-lg sm:max-h-2/3" onSubmit={handleFormSubmit}>
-        <TypographyH1>Sign in to <TextWithGradient>ChetChat</TextWithGradient></TypographyH1>
-        <div className="flex flex-col gap-3 min-w-full">
+    <AccountForm>
+      <AccountFormCard onSubmit={handleFormSubmit}>
+        <AccountFormHeading>
+          Sign in to <TextWithGradient>ChetChat</TextWithGradient>
+        </AccountFormHeading>
+        <AccountFormInputContainer>
           <Label htmlFor="email">Email</Label>
           <Input type="email" id="email" placeholder="Email" value={email} onChange={handleEmailChange} />
           <Label htmlFor="password">Password</Label>
           <Input type="password" id="password" placeholder="Password" value={password} onChange={handlePasswordChange} />
           <Button className="min-w-full" type="submit">Log in</Button>
-        </div>
+        </AccountFormInputContainer>
         <Link className="text-slate-400 font-light" to="/signup">Don't have an account? <span className="underline underline-offset-2 underline-">Sign up</span></Link>
-      </form>
-    </main>
+      </AccountFormCard>
+    </AccountForm>
   )
 }
 
