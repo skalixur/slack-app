@@ -1,4 +1,5 @@
 import axios from 'axios'
+import localStorageKeys from '../localStorageKeys'
 
 const API = axios.create({
   baseURL: 'https://slack-api.replit.app/api/v1',
@@ -8,7 +9,9 @@ const API = axios.create({
 })
 
 API.interceptors.request.use((config) => {
-  const authInfo = JSON.parse(localStorage.getItem('authInfo'))
+  const authInfo = JSON.parse(
+    localStorage.getItem(localStorageKeys.LOCALSTORAGE_KEY_AUTHINFO),
+  )
   if (authInfo) {
     console.log(authInfo)
     const { accessToken, client, expiry, uid } = authInfo

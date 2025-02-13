@@ -8,8 +8,8 @@ import AccountForm, { AccountFormCard, AccountFormHeading, AccountFormInputConta
 import TextWithGradient from "../components/TextWithGradient"
 import WarningAlert from "../components/WarningAlert"
 import AuthContext from "../contexts/AuthContext"
+import checkAndToastAPIError from "../lib/api/checkAndToastAPIError"
 import logIn from "../lib/api/logIn"
-import getErrorMessageFromAPIError from "../lib/api/getErrorMessageFromAPIError"
 
 function Login() {
   const { authInfo, setAuthInfo } = useContext(AuthContext)
@@ -30,15 +30,11 @@ function Login() {
       toast(<WarningAlert>Missing email or password!</WarningAlert>)
     }
 
-    const logInResponse = await logIn(email, password)
+    const apiResponse = await logIn(email, password)
+    if (!(await checkAndToastAPIError(apiResponse))) return;
 
-    if (!logInResponse.ok) {
-      const errorMessage = getErrorMessageFromAPIError(logInResponse)
-      toast(<WarningAlert>{errorMessage}</WarningAlert>)
-      return
-    }
-    const authHeaders = { logInResponse }
-    setAuthInfo(logInResponse)
+    const { authHeaders } = apiResponse
+    setAuthInfo(authHeaders)
   }
 
   return (

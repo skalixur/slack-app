@@ -11,8 +11,6 @@ export default async function logIn(email, password) {
       password,
     })
 
-    console.log(responseData)
-
     const { headers: responseHeaders } = responseData
     const { 'access-token': accessToken, client, expiry, uid } = responseHeaders
     const authHeaders = {

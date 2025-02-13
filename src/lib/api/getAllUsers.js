@@ -1,19 +1,22 @@
-import { useContext } from 'react'
 import API from './api'
+import handleAPIError from './handleAPIError'
 
 async function getAllUsers() {
   try {
     const response = await API.get('/users')
+
     const {
       data: { data: allUsers },
     } = response
-    return allUsers
-  } catch (error) {
-    if (error.response) {
-      console.error(error.response)
-      return
+
+    const result = {
+      ok: true,
+      allUsers,
     }
-    console.error(error)
+
+    return result
+  } catch (error) {
+    return handleAPIError(error)
   }
 }
 

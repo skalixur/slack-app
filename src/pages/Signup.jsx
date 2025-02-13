@@ -1,16 +1,15 @@
 import { Label } from "@radix-ui/react-label"
-import { CircleAlert } from "lucide-react"
 import { useContext, useState } from "react"
 import { Link } from "react-router"
+import { toast } from "sonner"
 import AccountForm, { AccountFormCard, AccountFormHeading, AccountFormInputContainer } from "../components/AccountForm"
 import TextWithGradient from "../components/TextWithGradient"
 import { Button } from "../components/ui/button"
 import { Input } from "../components/ui/input"
-import AuthContext from "../contexts/AuthContext"
-import { toast } from "sonner"
-import signUp from "../lib/api/signUp"
 import WarningAlert from "../components/WarningAlert"
-import getErrorMessageFromAPIError from "../lib/api/getErrorMessageFromAPIError"
+import AuthContext from "../contexts/AuthContext"
+import checkAndToastAPIError from "../lib/api/checkAndToastAPIError"
+import signUp from "../lib/api/signUp"
 
 const Signup = () => {
   const { authInfo, setAuthInfo } = useContext(AuthContext)
@@ -38,16 +37,10 @@ const Signup = () => {
       return
     }
 
-    const signInResponse = await signUp(email, password, passwordConfirmation)
-    console.log(signInResponse)
+    const apiResponse = await signUp(email, password, passwordConfirmation)
+    if (!(await checkAndToastAPIError(apiResponse))) return;
 
-    if (!signInResponse.ok) {
-      const errorMessage = getErrorMessageFromAPIError(signInResponse)
-      toast(<WarningAlert>{errorMessage}</WarningAlert>)
-      return
-    }
-
-    const { authHeaders } = signInResponse
+    const { authHeaders } = apiResponse
     setAuthInfo(authHeaders)
   }
 
