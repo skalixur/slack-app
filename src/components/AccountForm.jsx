@@ -11,7 +11,7 @@ function AccountForm({ children }) {
 
 export function AccountFormCard({ children, onSubmit }) {
   return (
-    <form onSubmit={onSubmit} className="text-center bg-white flex flex-col gap-5 p-8 w-full h-full justify-center items-center sm:border rounded-2xl sm:max-w-lg sm:max-h-4/5">
+    <form onSubmit={onSubmit} className="text-center bg-card shadow-xl flex flex-col gap-5 p-8 w-full h-full justify-center items-center sm:border rounded-2xl sm:max-w-lg sm:max-h-4/5">
       {children}
     </form>
   )

@@ -13,7 +13,6 @@ API.interceptors.request.use((config) => {
     localStorage.getItem(localStorageKeys.LOCALSTORAGE_KEY_AUTHINFO),
   )
   if (authInfo) {
-    console.log(authInfo)
     const { accessToken, client, expiry, uid } = authInfo
     config.headers['access-token'] = accessToken
     config.headers['client'] = client

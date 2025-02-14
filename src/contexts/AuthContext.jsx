@@ -1,6 +1,6 @@
 import { createContext } from "react"
-import { useStateWithLocalStorage } from "../hooks/useStateWithLocalStorage"
-import localStorageKeys from "../lib/localStorageKeys"
+import { useStateWithLocalStorage } from "@/hooks/useStateWithLocalStorage"
+import localStorageKeys from "@/lib/localStorageKeys"
 
 const returnedAuthInfo = localStorage.getItem(localStorageKeys.LOCALSTORAGE_KEY_AUTHINFO) || "null"
 const authInfoIfExistent = JSON.parse(returnedAuthInfo)

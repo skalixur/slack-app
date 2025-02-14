@@ -2,18 +2,14 @@ import { LogOut } from 'lucide-react'
 import { useContext } from "react"
 import AuthContext from "../contexts/AuthContext"
 import { Button } from "./ui/button"
+import UserChannelContext from '../contexts/UserChannelContext'
+import { logOut } from '../lib/logOut'
 
 function LogOutButton(props) {
-  const { authInfo, setAuthInfo } = useContext(AuthContext)
-
-  function handleLogOutButtonClick() {
-    setAuthInfo(null)
-  }
-
   return (
-    <Button onClick={handleLogOutButtonClick}>
+    <Button {...props} onClick={logOut}>
       <LogOut />
-      Log out
+      {props.children}
     </Button >
   )
 }
