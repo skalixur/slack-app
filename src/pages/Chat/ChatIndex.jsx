@@ -1,7 +1,3 @@
-
 export default function ChatIndex() {
-  return (
-    <div>ChatIndex</div>
-  )
+  return <div>ChatIndex</div>
 }
-

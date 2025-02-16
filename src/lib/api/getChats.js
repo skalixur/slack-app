@@ -1,5 +1,5 @@
 import API from './api'
-import handleAPIError from './handleAPIError'
+import handleAPIError from '../handleAPIError'
 
 async function getChats(receiverID, receiverClass) {
   try {

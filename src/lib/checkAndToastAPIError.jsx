@@ -1,13 +1,13 @@
-import { toast } from "sonner";
-import WarningAlert from "../../components/WarningAlert";
+import { toast } from 'sonner'
+import WarningAlert from '../components/WarningAlert'
 
-export default async function checkAndToastAPIError(response) {
+export default function checkAndToastAPIError(response) {
   if (!response.ok) {
-    const errorMessage = getErrorMessageFromAPIError(response);
-    toast(<WarningAlert>{errorMessage}</WarningAlert>);
-    return false;
+    const errorMessage = getErrorMessageFromAPIError(response)
+    toast(<WarningAlert>{errorMessage}</WarningAlert>)
+    return false
   }
-  return true;
+  return true
 }
 
 export function getErrorMessageFromAPIError(apiResponse) {
@@ -20,6 +20,8 @@ export function getErrorMessageFromAPIError(apiResponse) {
     if (apiResponse.errors && !apiResponse.errors.full_messages) {
       message = apiResponse.errors.join(separator)
     }
+  } else {
+    console.error(apiResponse)
   }
   return message
 }

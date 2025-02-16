@@ -6,9 +6,10 @@ import { useParams } from 'react-router'
 export default function ChannelChat() {
   const { channel } = useParams()
   return (
-    <ChatInterface getChatsFunction={() => {
-      return getChats(channel, 'Channel')
-    }} />
+    <ChatInterface
+      getChatsFunction={() => {
+        return getChats(channel, 'Channel')
+      }}
+    />
   )
 }
-

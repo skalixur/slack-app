@@ -6,9 +6,10 @@ import getChats from '../../lib/api/getChats'
 export default function UserChat() {
   const { user } = useParams()
   return (
-    <ChatInterface getChatsFunction={() => {
-      return getChats(user, 'User')
-    }} />
+    <ChatInterface
+      getChatsFunction={() => {
+        return getChats(user, 'User')
+      }}
+    />
   )
 }
-

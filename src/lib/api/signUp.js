@@ -1,5 +1,5 @@
 import API from '@/lib/api/api'
-import handleAPIError from './handleAPIError'
+import handleAPIError from '../handleAPIError'
 
 export default async function signUp(email, password, passwordConfirmation) {
   if (!email || !password || !passwordConfirmation) {

@@ -1,79 +1,71 @@
-import {
-  Sidebar,
-  SidebarContent,
-  useSidebar
-} from "@/components/ui/sidebar";
-import { Tabs, TabsContent } from "@/components/ui/tabs";
-import checkAndToastAPIError from "@/lib/api/checkAndToastAPIError";
-import getAllUsers from "@/lib/api/getAllUsers";
-import { ChevronRight, Hash, Lock, User, Users } from "lucide-react";
-import { useContext, useEffect, useRef, useState } from "react";
-import LogOutButton from "../../../../components/LogOutButton";
-import { Avatar, AvatarFallback } from "../../../../components/ui/avatar";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../../../../components/ui/dropdown-menu";
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../../../../components/ui/sidebar";
-import AuthContext from "../../../../contexts/AuthContext";
-import UserChannelContext from "../../../../contexts/UserChannelContext";
-import getUserChannels from "../../../../lib/api/getUserChannels";
-import { ChatSidebarCreateChannelsAction } from "./ChatSidebarCreateChannelsAction";
-import { ChatSidebarGroup } from "./ChatSidebarGroup";
-import { ChatSidebarHeader } from "./ChatSidebarHeader";
-import { ChatSidebarInfo } from "./ChatSidebarInfo";
-import { ChatSidebarMenuItem } from "./ChatSidebarMenuItem";
-import { ChatSidebarFooter } from "./ChatSidebarFooter";
-import { IDAvatar } from "../../../../components/IDAvatar";
+import { Sidebar, SidebarContent, useSidebar } from '@/components/ui/sidebar'
+import { Tabs, TabsContent } from '@/components/ui/tabs'
+import { Hash, Lock, User, Users } from 'lucide-react'
+import { useContext, useState } from 'react'
+import { IDAvatar } from '../../../../components/IDAvatar'
+import UserChannelContext from '../../../../contexts/UserChannelContext'
+import { ChatSidebarCreateChannelsAction } from './ChatSidebarCreateChannelsAction'
+import { ChatSidebarFooter } from './ChatSidebarFooter'
+import { ChatSidebarGroup } from './ChatSidebarGroup'
+import { ChatSidebarHeader } from './ChatSidebarHeader'
+import { ChatSidebarInfo } from './ChatSidebarInfo'
+import { ChatSidebarMenuItem } from './ChatSidebarMenuItem'
 
 function ChatSidebar() {
-  const { open } = useSidebar();
-  const hasFetched = useRef(false)
+  const { open } = useSidebar()
+  const { userChannels, allUsers } = useContext(UserChannelContext)
+  const [filteredChannels, setFilteredChannels] = useState(userChannels)
+  const [filteredUsers, setFilteredUsers] = useState(allUsers)
 
-  const { allUsersAndChannels, setAllUsersAndChannels } = useContext(UserChannelContext)
+  function onFilterChange(e) {
+    const search = e.target.value.trim()
+    const searchRegExp = new RegExp(search, 'gi')
 
-  useEffect(() => {
-    if (hasFetched.current) {
-      return
-    }
+    const filteredChannels = userChannels.filter((channel) =>
+      [channel.name, channel.id].some((field) => searchRegExp.test(field)),
+    )
 
-    async function fetchUsersAndChannels() {
-      const usersApiResponse = await getAllUsers();
-      if (!(await checkAndToastAPIError(usersApiResponse))) return;
+    const filteredUsers = allUsers.filter((user) =>
+      [user.email, user.id].some((field) => searchRegExp.test(field)),
+    )
 
-      const channelsApiResponse = await getUserChannels()
-      if (!(await checkAndToastAPIError(channelsApiResponse))) return
+    console.log(filteredChannels)
 
-      setAllUsersAndChannels({
-        allUsers: usersApiResponse.allUsers.sort((a, b) => a.id - b.id),
-        userChannels: channelsApiResponse.userChannels.sort()
-      })
-    }
-
-    hasFetched.current = true
-    fetchUsersAndChannels()
-  }, []);
+    setFilteredUsers(filteredUsers)
+    setFilteredChannels(filteredChannels)
+  }
 
   return (
-    <Tabs defaultValue="channels">
-      <Sidebar collapsible="icon">
-        {open && <ChatSidebarHeader />}
-        <SidebarContent className="scrollbar-none">
-          <TabsContent value="channels">
-            <ChatSidebarGroup title="Your channels" icon={<Lock />}>
+    <Tabs defaultValue='channels'>
+      <Sidebar collapsible='icon'>
+        {open && <ChatSidebarHeader onFilterChange={onFilterChange} />}
+        <SidebarContent className='scrollbar-none'>
+          <TabsContent value='channels'>
+            <ChatSidebarGroup title='Your channels' icon={<Lock />}>
               <ChatSidebarCreateChannelsAction />
-              {allUsersAndChannels.userChannels.map((channel) => (
-                <ChatSidebarMenuItem key={channel.id} tooltip={channel.name} to={`/chat/channel/${channel.id}`}>
+              {filteredChannels.map((channel) => (
+                <ChatSidebarMenuItem
+                  key={channel.id}
+                  tooltip={channel.name}
+                  to={`/chat/channel/${channel.id}`}
+                >
                   <IDAvatar>{channel.id}</IDAvatar>
-                  <Hash className="stroke-sidebar-foreground/70" />
+                  <Hash className='stroke-sidebar-foreground/70' />
                   <ChatSidebarInfo>{channel.name}</ChatSidebarInfo>
                 </ChatSidebarMenuItem>
               ))}
             </ChatSidebarGroup>
           </TabsContent>
-          <TabsContent value="users">
-            <ChatSidebarGroup title="All users" icon={<Users />}>
-              {allUsersAndChannels.allUsers.map((user) => (
-                <ChatSidebarMenuItem key={user.uid} tooltip={user.email} to={`/chat/user/${user.id}`}>
+          <TabsContent value='users'>
+            <ChatSidebarGroup title='All users' icon={<Users />}>
+              {filteredUsers.map((user) => (
+                <ChatSidebarMenuItem
+                  key={user.uid}
+                  tooltip={user.email}
+                  to={`/chat/user/${user.id}`}
+                >
                   <IDAvatar>{user.id}</IDAvatar>
-                  <User className="stroke-sidebar-foreground/70" />
+                  <User className='stroke-sidebar-foreground/70' />
                   <ChatSidebarInfo>{user.email}</ChatSidebarInfo>
                 </ChatSidebarMenuItem>
               ))}
@@ -83,7 +75,7 @@ function ChatSidebar() {
         <ChatSidebarFooter />
       </Sidebar>
     </Tabs>
-  );
+  )
 }
 
-export default ChatSidebar;
+export default ChatSidebar

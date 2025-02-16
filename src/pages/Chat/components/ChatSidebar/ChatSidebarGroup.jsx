@@ -1,7 +1,9 @@
 import {
-  SidebarGroup, SidebarGroupContent, SidebarMenu
-} from "@/components/ui/sidebar";
-import { ChatSidebarGroupLabel } from "./ChatSidebarGroupLabel";
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarMenu,
+} from '@/components/ui/sidebar'
+import { ChatSidebarGroupLabel } from './ChatSidebarGroupLabel'
 
 export const ChatSidebarGroup = ({ title, icon, children }) => (
   <SidebarGroup>
@@ -12,5 +14,4 @@ export const ChatSidebarGroup = ({ title, icon, children }) => (
       <SidebarMenu>{children}</SidebarMenu>
     </SidebarGroupContent>
   </SidebarGroup>
-);
-
+)
