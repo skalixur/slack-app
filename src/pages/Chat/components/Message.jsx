@@ -3,7 +3,7 @@ import { getTimestamp } from '../../../lib/getTimestamp'
 
 export const Message = ({ children }) => {
   return (
-    <div className='flex min-w-full items-center gap-3 py-2'>{children}</div>
+    <div className='flex min-w-full items-center gap-3 py-2 px-5'>{children}</div>
   )
 }
 export const MessageContent = ({ children }) => {

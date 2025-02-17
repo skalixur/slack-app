@@ -95,7 +95,7 @@ export default function ChatInterface({ getChatsFunction, sendChatFunction }) {
   )
 
   return (
-    <div className='flex h-full w-full flex-col'>
+    <div>
       <div className='scrollbar max-h-[85vh] w-full flex-1 overflow-y-auto'>
         {ChatElements}
       </div>
