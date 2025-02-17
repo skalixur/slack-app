@@ -1,7 +1,13 @@
+import { Repeat, SendHorizontal } from 'lucide-react'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router'
 import { IDAvatar } from '../../../components/IDAvatar'
+import { Button } from '../../../components/ui/button'
 import { Textarea } from '../../../components/ui/textarea'
+import { Toggle } from '../../../components/ui/toggle'
+import { Tooltip, TooltipContent, TooltipTrigger } from '../../../components/ui/tooltip'
+import AuthContext from '../../../contexts/AuthContext'
+import UserChannelContext from '../../../contexts/UserChannelContext'
 import checkAndToastAPIError from '../../../lib/checkAndToastAPIError'
 import {
   Message,
@@ -11,14 +17,9 @@ import {
   MessageHeader,
   MessageTimestamp,
 } from './Message'
-import { Button } from '../../../components/ui/button'
-import { Repeat, SendHorizontal } from 'lucide-react'
-import UserChannelContext from '../../../contexts/UserChannelContext'
-import AuthContext from '../../../contexts/AuthContext'
-import { Toggle } from '../../../components/ui/toggle'
 
 export default function ChatInterface({ getChatsFunction, sendChatFunction }) {
-  const [isPolling, setPolling] = useState(true)
+  const [isPolling, setIsPolling] = useState(false)
   const { allUsers } = useContext(UserChannelContext)
   const { authInfo: { uid } } = useContext(AuthContext)
   const [chats, setChats] = useState([])
@@ -28,21 +29,25 @@ export default function ChatInterface({ getChatsFunction, sendChatFunction }) {
 
   useEffect(() => {
     async function fetchChats() {
-      if (!isPolling || document.hidden) return
+      if (!isPolling) return
       const apiResponse = await getChatsFunction()
       if (!checkAndToastAPIError(apiResponse)) return
       setChats(apiResponse.chats)
     }
 
-    const pollingInterval = setInterval(fetchChats, 5000)
+    const pollingInterval = setInterval(fetchChats, 2000)
 
     return () => {
       clearInterval(pollingInterval)
     }
-  }, [channelOrUserId])
+  }, [channelOrUserId, isPolling])
 
   function handleMessageChange(e) {
     setMessage(e.target.value)
+  }
+
+  function handlePollingToggle(isPressed) {
+    setIsPolling(isPressed)
   }
 
   async function handleSendMessage(e) {
@@ -89,12 +94,20 @@ export default function ChatInterface({ getChatsFunction, sendChatFunction }) {
       <div className='flex-1 max-h-[85vh] w-full overflow-y-auto scrollbar'>
         {ChatElements}
       </div>
-      <form className='p-2 w-full max-w-[50vw] items-center gap-2 flex flex-nowrap'>
-        <Button className="size-4" onClick={handleSendMessage}>
-          <Textarea value={message} onChange={handleMessageChange} className='w-[40vw]' />
+      <form className='p-2 w-full items-center gap-2 flex flex-nowrap'>
+        <Textarea value={message} onChange={handleMessageChange} className='w-[40vw]' />
+
+        <Button className="size-9" onClick={handleSendMessage}>
           <SendHorizontal />
         </Button>
-        <Toggle className="size-4"><Repeat /></Toggle>
+        <Tooltip delayDuration={700}>
+          <TooltipTrigger asChild>
+            <Toggle onPressedChange={handlePollingToggle} className="size-9"><Repeat /></Toggle>
+          </TooltipTrigger>
+          <TooltipContent>
+            Message polling: {isPolling ? 'on' : 'off'}
+          </TooltipContent>
+        </Tooltip>
       </form>
     </div>
   )

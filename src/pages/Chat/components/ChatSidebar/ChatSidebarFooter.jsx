@@ -46,7 +46,7 @@ export function ChatSidebarFooter() {
           <DropdownMenuContent side='left' className='flex flex-col gap-1 min-w-full'>
             <DropdownMenuItem asChild className="min-w-full">
               <Button asChild variant='outline'>
-                <Link to={`/chat/user/${currentUser.id || ''}`}>
+                <Link to={`/chat/user/${currentUser?.id || ''}`}>
                   <NotebookPen />
                   Message self
                 </Link>

@@ -9,12 +9,15 @@ function LogOutButton(props) {
   const { setAuthInfo } = useContext(AuthContext)
   const { allUsers, userChannels, setAllUsers, setUserChannels } = useContext(UserChannelContext)
   function logOut() {
-    localStorage.removeItem(localStorageKeys.LOCALSTORAGE_KEY_USERS)
-    localStorage.removeItem(localStorageKeys.LOCALSTORAGE_KEY_CHANNELS)
+    // localStorage.removeItem(localStorageKeys.LOCALSTORAGE_KEY_USERS)
+    // localstorage.removeitem(localstoragekeys.localstorage_key_channels)
     // Why doesn't this work?
-    // setAllUsers(null)
-    // setUserChannels(null);
-    setAuthInfo(null)
+    console.log(setAllUsers, setUserChannels)
+    console.log('set state to null')
+    setAllUsers(null)
+    setUserChannels(null);
+    console.log('set all users and channels to null')
+    // setAuthInfo(null)
   }
 
   return (

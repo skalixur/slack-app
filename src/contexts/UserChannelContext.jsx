@@ -24,7 +24,6 @@ export function UserChannelProvider({ children }) {
   )
   const [loading, setLoading] = useState(true)
 
-
   useEffect(() => {
     async function fetchUsersAndChannels() {
       try {
