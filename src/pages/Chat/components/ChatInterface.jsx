@@ -100,7 +100,7 @@ export default function ChatInterface({ getChatsFunction, sendChatFunction }) {
         {ChatElements}
       </div>
       <form className='flex w-full flex-nowrap items-center gap-2 p-2'>
-        <Textarea value={message} onChange={handleMessageChange} className='grow' />
+        <Textarea value={message} onChange={handleMessageChange} className='grow resize-none' />
 
         <Button className="size-9" onClick={handleSendMessage}>
           <SendHorizontal />

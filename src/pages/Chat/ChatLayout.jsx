@@ -16,7 +16,7 @@ export default function ChatLayout() {
       <SidebarProvider>
         <ChatSidebar />
         <SidebarTrigger />
-        <main className='min-w-full'>
+        <main className='w-full max-h-[100vh]'>
           <ThemeToggle />
           <Outlet />
         </main>
