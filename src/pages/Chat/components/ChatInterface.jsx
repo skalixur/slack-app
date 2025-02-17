@@ -1,5 +1,5 @@
 import { Repeat, SendHorizontal } from 'lucide-react'
-import { useContext, useEffect, useMemo, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router'
 import { IDAvatar } from '../../../components/IDAvatar'
 import { Button } from '../../../components/ui/button'
@@ -19,101 +19,139 @@ import {
 } from './Message'
 
 export default function ChatInterface({ getChatsFunction, sendChatFunction }) {
-  const [isPolling, setIsPolling] = useState(false)
   const { allUsers } = useContext(UserChannelContext)
   const { authInfo: { uid } } = useContext(AuthContext)
+
   const [chats, setChats] = useState([])
   const [message, setMessage] = useState('')
+  const [isPolling, setIsPolling] = useState(false)
+
   const params = useParams()
   const channelOrUserId = params?.channel || params?.user
 
-  async function fetchChats() {
+  const toggleRef = useRef(null)
+  const scrollRef = useRef(null)
+
+  const fetchChats = useCallback(async () => {
+    if (document.hidden) return
     const apiResponse = await getChatsFunction()
     if (!checkAndToastAPIError(apiResponse)) return
     setChats(apiResponse.chats)
-  }
+  }, [getChatsFunction])
+
 
   useEffect(() => {
     fetchChats()
-  }, [channelOrUserId])
+  }, [channelOrUserId, fetchChats])
+
 
   useEffect(() => {
-    const pollingInterval = setInterval(() => {
-      if (!isPolling) return
-      fetchChats()
-    }, 2000)
+    if (!isPolling) return
+    const pollingInterval = setInterval(fetchChats, 2000)
+    return () => clearInterval(pollingInterval)
+  }, [isPolling, fetchChats])
 
-    return () => {
-      clearInterval(pollingInterval)
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
-  }, [isPolling])
+  }, [chats])
 
-  function handleMessageChange(e) {
-    setMessage(e.target.value)
-  }
+  const handleMessageChange = (e) => setMessage(e.target.value)
 
-  function handlePollingToggle(isPressed) {
+  const handlePollingToggle = (isPressed) => {
+    toggleRef.current.dataset.state = isPressed ? 'on' : 'off'
     setIsPolling(isPressed)
   }
 
-  async function handleSendMessage(e) {
+  const handleSendMessage = async (e) => {
     e.preventDefault()
+    const messageToSend = message.trim()
+    if (!messageToSend) return
+
     setMessage('')
-    const apiResponse = await sendChatFunction(channelOrUserId, message)
-    if (!checkAndToastAPIError(apiResponse)) return
 
     const messageToSave = {
-      ...apiResponse.message,
-      sender:
-        allUsers.find((user) => user.uid === uid),
-      receiver: {
-        id: channelOrUserId
-      }
+      created_at: new Date().toISOString(),
+      body: messageToSend,
+      sender: allUsers.find((user) => user.uid === uid),
+      receiver: { id: channelOrUserId }
     }
-    setChats([...chats, messageToSave])
+
+    setChats((prevChats) => [...prevChats, messageToSave])
+
+    const apiResponse = await sendChatFunction(channelOrUserId, messageToSend)
+    if (!checkAndToastAPIError(apiResponse)) return
   }
 
-  const ChatElements = useMemo(
-    () =>
-      chats.map(
-        (chat, index) => {
-          return <Message key={`${chat.id}-${index}`}>
-            <IDAvatar>{chat.sender.id}</IDAvatar>
-            <MessageContent>
-              <MessageHeader>
-                <MessageAuthor id={chat.sender.id}>
-                  {chat.sender.uid}
-                </MessageAuthor>
-                <MessageTimestamp createdAtDate={chat.created_at} />
-              </MessageHeader>
-              <MessageBody>{chat.body}</MessageBody>
-            </MessageContent>
-          </Message>
-        }
-      ),
-    [chats]
-  )
+  function handleKeyDown(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage(e);
+    }
+  }
+
+  const ChatElements = useMemo(() => (
+    chats.map((chat, index) => (
+      <Message key={`${chat.id}-${index}`}>
+        <IDAvatar>{chat.sender.id}</IDAvatar>
+        <MessageContent>
+          <MessageHeader>
+            <MessageAuthor id={chat.sender.id}>{chat.sender.uid}</MessageAuthor>
+            <MessageTimestamp createdAtDate={chat.created_at} />
+          </MessageHeader>
+          <MessageBody>{chat.body}</MessageBody>
+        </MessageContent>
+      </Message>
+    ))
+  ), [chats])
+
+
 
   return (
-    <div>
-      <div className='scrollbar max-h-[85vh] w-full flex-1 overflow-y-auto'>
+    <div className="flex h-full flex-col justify-end">
+      <div
+        ref={scrollRef}
+        className="scrollbar overflow-y-auto"
+      >
         {ChatElements}
       </div>
-      <form className='flex w-full flex-nowrap items-center gap-2 p-2'>
-        <Textarea value={message} onChange={handleMessageChange} className='grow resize-none' />
 
-        <Button className="size-9" onClick={handleSendMessage}>
-          <SendHorizontal />
-        </Button>
-        <Tooltip delayDuration={700}>
-          <TooltipTrigger asChild>
-            <Toggle onPressedChange={handlePollingToggle} className="size-9"><Repeat /></Toggle>
-          </TooltipTrigger>
-          <TooltipContent>
-            Message polling: {isPolling ? 'on' : 'off'}
-          </TooltipContent>
-        </Tooltip>
-      </form>
+      <ChatForm
+        message={message}
+        onChange={handleMessageChange}
+        onSendMessage={handleSendMessage}
+        onKeyDown={handleKeyDown}
+        handlePollingToggle={handlePollingToggle}
+        isPolling={isPolling}
+        toggleRef={toggleRef}
+      />
     </div>
   )
 }
+
+const ChatForm = ({ message, onChange, onSendMessage, onKeyDown, handlePollingToggle, isPolling, toggleRef }) => (
+  <form className="flex w-full flex-nowrap items-center gap-2 p-2 pr-8" onSubmit={onSendMessage}>
+    <Textarea
+      value={message}
+      onChange={onChange}
+      onKeyDown={onKeyDown}
+      className="grow resize-none"
+    />
+    <Button type="submit" className="size-9">
+      <SendHorizontal />
+    </Button>
+    <Tooltip delayDuration={700}>
+      <TooltipTrigger asChild>
+        <Toggle data-state="off" variant="outline" ref={toggleRef} onPressedChange={handlePollingToggle} className="size-9">
+          <Repeat />
+        </Toggle>
+      </TooltipTrigger>
+      <TooltipContent>
+        Message polling: {isPolling ? 'on' : 'off'}
+      </TooltipContent>
+    </Tooltip>
+  </form>
+);
+

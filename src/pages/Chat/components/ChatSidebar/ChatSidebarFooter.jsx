@@ -17,6 +17,7 @@ import AuthContext from '../../../../contexts/AuthContext'
 import UserChannelContext from '../../../../contexts/UserChannelContext'
 import { Button } from '../../../../components/ui/button'
 import { Link } from 'react-router'
+import { ThemeToggle } from '../../../../components/ThemeToggle'
 
 export function ChatSidebarFooter() {
   const { allUsers, loading } = useContext(UserChannelContext)
@@ -50,6 +51,11 @@ export function ChatSidebarFooter() {
                   <NotebookPen />
                   Message self
                 </Link>
+              </Button>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild className="min-w-full">
+              <Button asChild variant='outline'>
+                <ThemeToggle />
               </Button>
             </DropdownMenuItem>
             <DropdownMenuItem asChild className="min-w-full">
