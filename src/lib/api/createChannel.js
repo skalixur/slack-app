@@ -11,15 +11,13 @@ export default async function createChannel(channelName, userIds) {
       user_ids: userIds,
     })
 
-    console.log(responseData)
-
     const {
       data: { data },
     } = responseData
 
     const result = {
       ok: true,
-      data,
+      newChannel: data,
     }
 
     return result

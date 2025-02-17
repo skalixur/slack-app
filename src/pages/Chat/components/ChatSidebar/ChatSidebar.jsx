@@ -1,7 +1,7 @@
 import { Sidebar, SidebarContent, useSidebar } from '@/components/ui/sidebar'
 import { Tabs, TabsContent } from '@/components/ui/tabs'
 import { Hash, Lock, User, Users } from 'lucide-react'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { IDAvatar } from '../../../../components/IDAvatar'
 import UserChannelContext from '../../../../contexts/UserChannelContext'
 import { ChatSidebarCreateChannelsAction } from './ChatSidebarCreateChannelsAction'
@@ -14,25 +14,24 @@ import { ChatSidebarMenuItem } from './ChatSidebarMenuItem'
 function ChatSidebar() {
   const { open } = useSidebar()
   const { userChannels, allUsers } = useContext(UserChannelContext)
-  const [filteredChannels, setFilteredChannels] = useState(userChannels)
-  const [filteredUsers, setFilteredUsers] = useState(allUsers)
+  const [search, setSearch] = useState('')
+  const searchRegExp = new RegExp(search, 'gi')
+
+  const filteredUsers = useMemo(() => {
+    return allUsers.filter((user) =>
+      [user.email, user.id].some((field) => searchRegExp.test(field)),
+    )
+  }, [allUsers, search])
+
+  const filteredChannels = useMemo(() => {
+    return userChannels.filter((channel) =>
+      [channel.name, channel.id].some((field) => searchRegExp.test(field)),
+    )
+  }, [userChannels, search])
 
   function onFilterChange(e) {
     const search = e.target.value.trim()
-    const searchRegExp = new RegExp(search, 'gi')
-
-    const filteredChannels = userChannels.filter((channel) =>
-      [channel.name, channel.id].some((field) => searchRegExp.test(field)),
-    )
-
-    const filteredUsers = allUsers.filter((user) =>
-      [user.email, user.id].some((field) => searchRegExp.test(field)),
-    )
-
-    console.log(filteredChannels)
-
-    setFilteredUsers(filteredUsers)
-    setFilteredChannels(filteredChannels)
+    setSearch(search)
   }
 
   return (
