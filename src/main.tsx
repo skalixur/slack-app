@@ -6,16 +6,19 @@ import './index.css'
 import { AuthContextProvider } from './contexts/AuthContext'
 import { Toaster } from '@/components/ui/sonner'
 import { ThemeProvider } from '@/components/theme-provider'
+import { UserChannelProvider } from './contexts/UserChannelContext.jsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
       <AuthContextProvider>
-        <BrowserRouter>
-          <App />
-          <Toaster />
-        </BrowserRouter>
+        <UserChannelProvider>
+          <BrowserRouter>
+            <App />
+            <Toaster />
+          </BrowserRouter>
+        </UserChannelProvider>
       </AuthContextProvider>
     </ThemeProvider>
-  </StrictMode>,
+  </StrictMode >,
 )

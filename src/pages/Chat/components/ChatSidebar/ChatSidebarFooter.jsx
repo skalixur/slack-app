@@ -25,7 +25,7 @@ export function ChatSidebarFooter() {
   } = useContext(AuthContext)
   const { open } = useSidebar()
 
-  const currentUser = allUsers.find((user) => user.uid === uid)
+  const currentUser = allUsers?.find((user) => user.uid === uid)
 
   return (
     <SidebarMenu className='p-3'>
@@ -36,7 +36,7 @@ export function ChatSidebarFooter() {
               <User />
               {open && (
                 <span className='text-sidebar-foreground/70 tabular-nums'>
-                  {!loading && currentUser.id}
+                  {!loading && currentUser?.id}
                 </span>
               )}
               {open && uid}

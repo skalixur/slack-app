@@ -17,7 +17,7 @@ function LogOutButton(props) {
     setAllUsers(null)
     setUserChannels(null);
     console.log('set all users and channels to null')
-    // setAuthInfo(null)
+    setAuthInfo(null)
   }
 
   return (

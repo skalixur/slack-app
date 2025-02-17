@@ -1,9 +1,10 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { useStateWithLocalStorage } from '@/hooks/useStateWithLocalStorage'
 import localStorageKeys from '../lib/localStorageKeys'
 import getAllUsers from '@/lib/api/getAllUsers'
 import getUserChannels from '@/lib/api/getUserChannels'
 import checkAndToastAPIError from '@/lib/checkAndToastAPIError'
+import AuthContext from './AuthContext'
 
 const UserChannelContext = createContext({
   allUsers: [],
@@ -14,6 +15,8 @@ const UserChannelContext = createContext({
 })
 
 export function UserChannelProvider({ children }) {
+  const { authInfo } = useContext(AuthContext)
+
   const [allUsers, setAllUsers] = useStateWithLocalStorage(
     localStorageKeys.LOCALSTORAGE_KEY_USERS,
     []
@@ -45,8 +48,11 @@ export function UserChannelProvider({ children }) {
       }
     }
 
-    fetchUsersAndChannels()
-  }, [])
+    if (authInfo) {
+      fetchUsersAndChannels()
+    }
+
+  }, [authInfo])
 
   return (
     <UserChannelContext.Provider

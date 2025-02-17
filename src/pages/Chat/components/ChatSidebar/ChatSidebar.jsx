@@ -18,13 +18,13 @@ function ChatSidebar() {
   const searchRegExp = new RegExp(search, 'gi')
 
   const filteredUsers = useMemo(() => {
-    return allUsers.filter((user) =>
+    return allUsers?.filter((user) =>
       [user.email, user.id].some((field) => searchRegExp.test(field)),
     )
   }, [allUsers, search])
 
   const filteredChannels = useMemo(() => {
-    return userChannels.filter((channel) =>
+    return userChannels?.filter((channel) =>
       [channel.name, channel.id].some((field) => searchRegExp.test(field)),
     )
   }, [userChannels, search])
@@ -42,7 +42,7 @@ function ChatSidebar() {
           <TabsContent value='channels'>
             <ChatSidebarGroup title='Your channels' icon={<Lock />}>
               <ChatSidebarCreateChannelsAction />
-              {filteredChannels.map((channel) => (
+              {filteredChannels?.map((channel) => (
                 <ChatSidebarMenuItem
                   key={channel.id}
                   tooltip={channel.name}
@@ -57,7 +57,7 @@ function ChatSidebar() {
           </TabsContent>
           <TabsContent value='users'>
             <ChatSidebarGroup title='All users' icon={<Users />}>
-              {filteredUsers.map((user) => (
+              {filteredUsers?.map((user) => (
                 <ChatSidebarMenuItem
                   key={user.uid}
                   tooltip={user.email}
