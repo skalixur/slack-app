@@ -51,7 +51,7 @@ export const ChatSidebarCreateChannelsAction = () => {
           <DialogDescription>Add users to your channel</DialogDescription>
         </DialogHeader>
         <form className='flex flex-col gap-2' onSubmit={handleFormSubmit}>
-          <div className='grid grid-cols-3 grid-rows-2 gap-2 items-center text-right'>
+          <div className='grid grid-cols-3 grid-rows-2 items-center gap-2 text-right'>
             <Label className='col-span-1' htmlFor='channel-name'>
               Channel name
             </Label>

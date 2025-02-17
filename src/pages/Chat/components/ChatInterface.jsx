@@ -27,20 +27,26 @@ export default function ChatInterface({ getChatsFunction, sendChatFunction }) {
   const params = useParams()
   const channelOrUserId = params?.channel || params?.user
 
-  useEffect(() => {
-    async function fetchChats() {
-      if (!isPolling) return
-      const apiResponse = await getChatsFunction()
-      if (!checkAndToastAPIError(apiResponse)) return
-      setChats(apiResponse.chats)
-    }
+  async function fetchChats() {
+    const apiResponse = await getChatsFunction()
+    if (!checkAndToastAPIError(apiResponse)) return
+    setChats(apiResponse.chats)
+  }
 
-    const pollingInterval = setInterval(fetchChats, 2000)
+  useEffect(() => {
+    fetchChats()
+  }, [channelOrUserId])
+
+  useEffect(() => {
+    const pollingInterval = setInterval(() => {
+      if (!isPolling) return
+      fetchChats()
+    }, 2000)
 
     return () => {
       clearInterval(pollingInterval)
     }
-  }, [channelOrUserId, isPolling])
+  }, [isPolling])
 
   function handleMessageChange(e) {
     setMessage(e.target.value)
@@ -68,7 +74,6 @@ export default function ChatInterface({ getChatsFunction, sendChatFunction }) {
   }
 
   const ChatElements = useMemo(
-
     () =>
       chats.map(
         (chat, index) => {
@@ -90,12 +95,12 @@ export default function ChatInterface({ getChatsFunction, sendChatFunction }) {
   )
 
   return (
-    <div className='flex flex-col h-full w-full'>
-      <div className='flex-1 max-h-[85vh] w-full overflow-y-auto scrollbar'>
+    <div className='flex h-full w-full flex-col'>
+      <div className='scrollbar max-h-[85vh] w-full flex-1 overflow-y-auto'>
         {ChatElements}
       </div>
-      <form className='p-2 w-full items-center gap-2 flex flex-nowrap'>
-        <Textarea value={message} onChange={handleMessageChange} className='w-[40vw]' />
+      <form className='flex w-full flex-nowrap items-center gap-2 p-2'>
+        <Textarea value={message} onChange={handleMessageChange} className='grow' />
 
         <Button className="size-9" onClick={handleSendMessage}>
           <SendHorizontal />

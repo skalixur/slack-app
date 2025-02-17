@@ -1,7 +1,7 @@
 import { SidebarGroupLabel } from '@/components/ui/sidebar'
 
 export const ChatSidebarGroupLabel = ({ children }) => (
-  <SidebarGroupLabel className='flex items-left gap-1'>
+  <SidebarGroupLabel className='items-left flex gap-1'>
     {children}
   </SidebarGroupLabel>
 )

@@ -8,10 +8,10 @@ import { memo } from 'react'
 import { Link } from 'react-router'
 
 export const ChatSidebarMenuItem = memo(({ children, tooltip, to }) => (
-  <SidebarMenuItem className='flex justify-center items-center w-full'>
+  <SidebarMenuItem className='flex w-full items-center justify-center'>
     <Tooltip delayDuration={700}>
       <TooltipTrigger asChild>
-        <SidebarMenuButton asChild className='hover:cursor-pointer min-w-full'>
+        <SidebarMenuButton asChild className='min-w-full hover:cursor-pointer'>
           <Link to={to}>{children}</Link>
         </SidebarMenuButton>
       </TooltipTrigger>

@@ -13,7 +13,6 @@ export function useStateWithLocalStorage(key, initialValue) {
   })
 
   useEffect(() => {
-    console.log('Setting key', key, 'to value', state)
     localStorage.setItem(key, JSON.stringify(state))
   }, [state])
 

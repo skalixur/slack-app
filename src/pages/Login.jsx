@@ -68,9 +68,9 @@ function Login() {
             Log in
           </Button>
         </AccountFormInputContainer>
-        <Link className='text-slate-400 font-light' to='/signup'>
-          Don't have an account?{' '}
-          <span className='underline underline-offset-2 underline-'>
+        <Link className='font-light text-slate-400' to='/signup'>
+          Don't have an account?
+          <span className='underline underline-offset-2'>
             Sign up
           </span>
         </Link>
