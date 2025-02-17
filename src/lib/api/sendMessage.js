@@ -1,14 +1,20 @@
 import API from '@/lib/api/api'
 import handleAPIError from '../handleAPIError'
 
-export default async function createChannel(channelName, userIds) {
-  if (!channelName || !userIds) {
+export default async function sendMessage(
+  receiverId,
+  receiverClass,
+  messageBody,
+) {
+  if (!receiverId || !receiverClass || !messageBody) {
     throw new Error('Missing arguments')
   }
+
   try {
-    const responseData = await API.post(`/channels`, {
-      name: channelName,
-      user_ids: userIds,
+    const responseData = await API.post(`/messages`, {
+      receiver_id: receiverId,
+      receiver_class: receiverClass,
+      body: messageBody,
     })
 
     const {
@@ -17,7 +23,7 @@ export default async function createChannel(channelName, userIds) {
 
     const result = {
       ok: true,
-      newChannel: data,
+      message: data,
     }
 
     return result

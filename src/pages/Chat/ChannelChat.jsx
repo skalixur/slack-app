@@ -1,7 +1,7 @@
-import React from 'react'
-import ChatInterface from './components/ChatInterface'
-import getChats from '../../lib/api/getChats'
 import { useParams } from 'react-router'
+import getChats from '../../lib/api/getChats'
+import sendMessage from '../../lib/api/sendMessage'
+import ChatInterface from './components/ChatInterface'
 
 export default function ChannelChat() {
   const { channel } = useParams()
@@ -9,6 +9,9 @@ export default function ChannelChat() {
     <ChatInterface
       getChatsFunction={() => {
         return getChats(channel, 'Channel')
+      }}
+      sendChatFunction={(channelId, body) => {
+        return sendMessage(channelId, 'Channel', body)
       }}
     />
   )

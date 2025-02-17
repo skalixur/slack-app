@@ -4,20 +4,12 @@ import { ThemeToggle } from '../../components/ThemeToggle'
 import { Button } from '../../components/ui/button'
 import { SidebarProvider } from '../../components/ui/sidebar'
 import { TooltipProvider } from '../../components/ui/tooltip'
-import checkAndToastAPIError from '../../lib/checkAndToastAPIError'
-import getUserChannels from '../../lib/api/getUserChannels'
-import ChatSidebar from './components/ChatSidebar/ChatSidebar'
-import getChats from '../../lib/api/getChats'
-import createChannel from '../../lib/api/createChannel'
 import { UserChannelProvider } from '../../contexts/UserChannelContext'
+import sendMessage from '../../lib/api/sendMessage'
+import checkAndToastAPIError from '../../lib/checkAndToastAPIError'
+import ChatSidebar from './components/ChatSidebar/ChatSidebar'
 
 export default function ChatLayout() {
-
-  async function testFunction() {
-    const apiResponse = createChannel('hello chat', [1])
-    if (!checkAndToastAPIError(apiResponse)) return
-    console.log(apiResponse.chats)
-  }
 
   return (
     <UserChannelProvider>
@@ -27,7 +19,6 @@ export default function ChatLayout() {
           <SidebarTrigger />
           <main className='min-w-full'>
             <ThemeToggle />
-            <Button onClick={testFunction}>Test button</Button>
             <Outlet />
           </main>
         </SidebarProvider>

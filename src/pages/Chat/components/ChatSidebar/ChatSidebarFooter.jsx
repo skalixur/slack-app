@@ -1,5 +1,5 @@
 import { useSidebar } from '@/components/ui/sidebar'
-import { ChevronRight, User } from 'lucide-react'
+import { ChevronRight, NotebookPen, User } from 'lucide-react'
 import { useContext } from 'react'
 import LogOutButton from '../../../../components/LogOutButton'
 import {
@@ -15,6 +15,8 @@ import {
 } from '../../../../components/ui/sidebar'
 import AuthContext from '../../../../contexts/AuthContext'
 import UserChannelContext from '../../../../contexts/UserChannelContext'
+import { Button } from '../../../../components/ui/button'
+import { Link } from 'react-router'
 
 export function ChatSidebarFooter() {
   const { allUsers, loading } = useContext(UserChannelContext)
@@ -41,8 +43,16 @@ export function ChatSidebarFooter() {
               <ChevronRight className='ml-auto' />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
-          <DropdownMenuContent side='left' className='min-w-full'>
-            <DropdownMenuItem asChild>
+          <DropdownMenuContent side='left' className='flex flex-col gap-1 min-w-full'>
+            <DropdownMenuItem asChild className="min-w-full">
+              <Button asChild variant='outline'>
+                <Link to={`/chat/user/${currentUser.id || ''}`}>
+                  <NotebookPen />
+                  Message self
+                </Link>
+              </Button>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild className="min-w-full">
               <LogOutButton variant='outline'>{open && `Log out`}</LogOutButton>
             </DropdownMenuItem>
           </DropdownMenuContent>
