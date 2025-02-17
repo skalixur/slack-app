@@ -12,17 +12,15 @@ import ChatSidebar from './components/ChatSidebar/ChatSidebar'
 export default function ChatLayout() {
 
   return (
-    <UserChannelProvider>
-      <TooltipProvider>
-        <SidebarProvider>
-          <ChatSidebar />
-          <SidebarTrigger />
-          <main className='min-w-full'>
-            <ThemeToggle />
-            <Outlet />
-          </main>
-        </SidebarProvider>
-      </TooltipProvider>
-    </UserChannelProvider>
+    <TooltipProvider>
+      <SidebarProvider>
+        <ChatSidebar />
+        <SidebarTrigger />
+        <main className='min-w-full'>
+          <ThemeToggle />
+          <Outlet />
+        </main>
+      </SidebarProvider>
+    </TooltipProvider>
   )
 }
