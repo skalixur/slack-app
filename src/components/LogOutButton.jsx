@@ -7,10 +7,11 @@ import localStorageKeys from '../lib/localStorageKeys'
 
 function LogOutButton(props) {
   const { setAuthInfo } = useContext(AuthContext)
-  const { allUsers, userChannels, setAllUsers, setUserChannels } = useContext(UserChannelContext)
+  const { allUsers, userChannels, setAllUsers, setUserChannels } =
+    useContext(UserChannelContext)
   function logOut() {
     setAllUsers(null)
-    setUserChannels(null);
+    setUserChannels(null)
     setAuthInfo(null)
   }
 

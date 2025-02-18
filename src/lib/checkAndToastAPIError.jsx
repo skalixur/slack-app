@@ -2,7 +2,6 @@ import { toast } from 'sonner'
 import WarningAlert from '../components/WarningAlert'
 
 export default function checkAndToastAPIError(response) {
-  console.log(response)
   if (!response.ok) {
     const errorMessage = getErrorMessageFromAPIError(response)
     toast(<WarningAlert>{errorMessage}</WarningAlert>)
@@ -22,7 +21,7 @@ export function getErrorMessageFromAPIError(apiResponse) {
       message = apiResponse.errors.join(separator)
     }
   } else {
-    // console.error(apiResponse)
+    console.error(apiResponse)
   }
   return message
 }

@@ -20,5 +20,5 @@ createRoot(document.getElementById('root')!).render(
         </UserChannelProvider>
       </AuthContextProvider>
     </ThemeProvider>
-  </StrictMode >,
+  </StrictMode>,
 )

@@ -44,8 +44,11 @@ export function ChatSidebarFooter() {
               <ChevronRight className='ml-auto' />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
-          <DropdownMenuContent side='left' className='flex min-w-full flex-col gap-1'>
-            <DropdownMenuItem asChild className="min-w-full">
+          <DropdownMenuContent
+            side='left'
+            className='flex min-w-full flex-col gap-1'
+          >
+            <DropdownMenuItem asChild className='min-w-full'>
               <Button asChild variant='outline'>
                 <Link to={`/chat/user/${currentUser?.id || ''}`}>
                   <NotebookPen />
@@ -53,12 +56,12 @@ export function ChatSidebarFooter() {
                 </Link>
               </Button>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild className="min-w-full">
+            <DropdownMenuItem asChild className='min-w-full'>
               <Button asChild variant='outline'>
                 <ThemeToggle />
               </Button>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild className="min-w-full">
+            <DropdownMenuItem asChild className='min-w-full'>
               <LogOutButton variant='outline'>{open && `Log out`}</LogOutButton>
             </DropdownMenuItem>
           </DropdownMenuContent>

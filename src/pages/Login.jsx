@@ -70,9 +70,7 @@ function Login() {
         </AccountFormInputContainer>
         <Link className='font-light text-slate-400' to='/signup'>
           Don't have an account?{' '}
-          <span className='underline underline-offset-2'>
-            Sign up
-          </span>
+          <span className='underline underline-offset-2'>Sign up</span>
         </Link>
       </AccountFormCard>
     </AccountForm>

@@ -10,8 +10,8 @@ const UserChannelContext = createContext({
   allUsers: [],
   userChannels: [],
   loading: true,
-  setAllUsers: () => { },
-  setUserChannels: () => { },
+  setAllUsers: () => {},
+  setUserChannels: () => {},
 })
 
 export function UserChannelProvider({ children }) {
@@ -19,11 +19,11 @@ export function UserChannelProvider({ children }) {
 
   const [allUsers, setAllUsers] = useStateWithLocalStorage(
     localStorageKeys.LOCALSTORAGE_KEY_USERS,
-    []
+    [],
   )
   const [userChannels, setUserChannels] = useStateWithLocalStorage(
     localStorageKeys.LOCALSTORAGE_KEY_CHANNELS,
-    []
+    [],
   )
   const [loading, setLoading] = useState(true)
 
@@ -33,7 +33,7 @@ export function UserChannelProvider({ children }) {
         const usersApiResponse = await getAllUsers()
         if (!checkAndToastAPIError(usersApiResponse)) return
         const sortedUsers = usersApiResponse.allUsers.sort(
-          (a, b) => a.id - b.id
+          (a, b) => a.id - b.id,
         )
         setAllUsers(sortedUsers)
 
@@ -51,7 +51,6 @@ export function UserChannelProvider({ children }) {
     if (authInfo) {
       fetchUsersAndChannels()
     }
-
   }, [authInfo])
 
   return (
