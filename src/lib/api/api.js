@@ -1,8 +1,10 @@
 import axios from 'axios'
 import localStorageKeys from '../localStorageKeys'
 
+const baseURL = import.meta.env.VITE_SLACK_API_BASE_URL
+
 const API = axios.create({
-  baseURL: 'https://slack-api.replit.app/api/v1',
+  baseURL,
   headers: {
     'Content-Type': 'application/json',
   },

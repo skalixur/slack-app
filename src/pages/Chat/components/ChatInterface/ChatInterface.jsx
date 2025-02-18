@@ -58,7 +58,7 @@ export default function ChatInterface({
   }, [messageContainerId])
   useEffect(() => {
     if (!isPolling) return
-    const pollingInterval = setInterval(fetchChats, 2000)
+    const pollingInterval = setInterval(fetchChats, 300)
     return () => clearInterval(pollingInterval)
   }, [isPolling, fetchChats])
 
