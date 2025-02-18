@@ -6,9 +6,14 @@ import TextWithGradient from '../../../../components/TextWithGradient'
 
 export const ChatSidebarHeader = ({ onFilterChange }) => (
   <div className='flex flex-col gap-2 p-2'>
-    <TabsList className='flex w-full border-b shadow-sm'>
-      <ChatSidebarTabTrigger value='channels'>Channels</ChatSidebarTabTrigger>
-      <ChatSidebarTabTrigger value='users'>Users</ChatSidebarTabTrigger>
+    <TabsList className='flex gap-2 p-2 w-full border-b shadow-sm'>
+      <div className="font-semibold">
+        <TextWithGradient>ChetChat</TextWithGradient>
+      </div>
+      <div className="flex grow">
+        <ChatSidebarTabTrigger value='channels'>Channels</ChatSidebarTabTrigger>
+        <ChatSidebarTabTrigger value='users'>Users</ChatSidebarTabTrigger>
+      </div>
     </TabsList>
     <div className='flex w-full items-center gap-2'>
       <Search className='stroke-muted-foreground' />
