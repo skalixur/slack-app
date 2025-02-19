@@ -13,7 +13,7 @@ createRoot(document.getElementById('root')).render(
     <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
       <AuthContextProvider>
         <UserChannelProvider>
-          <BrowserRouter>
+          <BrowserRouter basename="/slack-app">
             <App />
             <Toaster />
           </BrowserRouter>
