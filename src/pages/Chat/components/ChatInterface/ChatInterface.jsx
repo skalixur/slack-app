@@ -72,7 +72,10 @@ export default function ChatInterface({
   }, [chats])
 
   const handleMessageChange = (e) => setMessage(e.target.value)
-  const handlePollingToggle = (isPressed) => setIsPolling(isPressed)
+  const handlePollingToggle = (isPressed) => {
+    toggleRef.current.dataset.state = isPressed ? "on" : "off"
+    setIsPolling(isPressed)
+  }
 
   const handleSendMessage = async (e) => {
     e.preventDefault()
